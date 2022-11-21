@@ -1,0 +1,9 @@
+venv/
+env/
+__pycache__/
+db.sqlite3
+*.pyc
+*.pot
+*.log
+.idea/
+media/
