@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  app:
+    container_name: email_task
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    command: run
+    volumes:
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    env_file:
+      .env
+    ports:
+      - 127.0.0.1:8000:8000
+
+
+  rabbitmq3:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3.6.0
+    env_file:
+      - .env
+    volumes:
+      - /srv/landing/rabbitmq:/var/lib/rabbitmq/
+    ports:
+      - 5675:5672
+      - 15672:15672
+
+
+  celery_worker:
+    command: celery
+    container_name: worker
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    depends_on:
+      - app
+      - rabbitmq3
+    restart: always
+
+  celery_flower:
+    command: celery_flower
+    container_name: celery_flower
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    depends_on:
+      - app
+      - rabbitmq3
+      - celery_worker
+    restart: always
+    ports:
+      - 5555:5555

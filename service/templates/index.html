@@ -9,12 +9,21 @@
 <body>
   <div class="mx-auto" style="margin: 25px 25px 25px 25px; padding-left:450px; padding-right:400px;">
     <h1>Форма для отправки рассылки</h1>
-
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">
+                    {{ message|safe }}
+                    <a href="#" class="close">✖</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form action="" method="post">
         {%csrf_token %}
 
         {{form}}
-        <button type="submit">Отправить</button>
+        <button type="submit" class="btn btn-primary">Отправить</button>
       </form>
     </div>
 

@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u$(2-l$m1)@ly=kb+)ns7wy&u4(&vkqp+v%)+)(ct(g0v(pt5q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -71,7 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'email_task.wsgi.application'
 
-CELERY_BROKER_URL = "amqp://localhost"
+CELERY_BROKER_URL = "amqp://celery_user:MBjxgpXwrCmEAAPd@rabbitmq3:5672/"
+CELERY_RESULT_BACKEND="amqp://celery_user:MBjxgpXwrCmEAAPd@rabbitmq3:5672/"
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -110,7 +111,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
@@ -123,5 +124,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
